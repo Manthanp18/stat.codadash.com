@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import bcrypt from 'bcryptjs'
+// import bcrypt from 'bcryptjs'
 import { Envelope, Key, Person } from 'react-bootstrap-icons'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
