@@ -13,8 +13,10 @@ export default applyMiddleware(async (req, res) => {
         .catch(err => {throw err._message})
       res.status(200).json(statement)
     } else if (method === 'GET') {
+      const jwt = jwtFromReqOrCtx(req)
+      const user = await User.findOne({ email: jwt.email.toLowerCase() })
+      if (!user) throw `Could Not find ${jwt.email}`
       const agg = await getAgg()
-        .then(res => res)
         .catch(err => {throw err})
       res.status(200).json(agg[0])
     } else if (method === 'DELETE') {

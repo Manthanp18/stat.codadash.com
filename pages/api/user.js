@@ -24,17 +24,17 @@ export default applyMiddleware(async (req, res) => {
           throw err._message
         })
     } else if (method === 'GET') {
-      const user = await User.findOne({ email: query.email.toLowerCase() })
-      res.status(200).json(user)
+      // const user = await User.findOne({ email: query.email.toLowerCase() })
+      // res.status(200).json(user)
       return
     } else if (method === 'PUT') {
       // new: true => returns the updated document
-      const user = await User.findOneAndUpdate({ email: body.email.toLowerCase() }, data, { new: true })
-        .catch(err => {
-          console.log(err)
-          throw err._message
-        })
-      res.status(200).json(user)
+      // const user = await User.findOneAndUpdate({ email: body.email.toLowerCase() }, data, { new: true })
+      //   .catch(err => {
+      //     console.log(err)
+      //     throw err._message
+      //   })
+      // res.status(200).json(user)
       return
     } else {
       throw `Cannot use ${method} method for this route`
