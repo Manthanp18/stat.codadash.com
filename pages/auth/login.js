@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import { useRouter } from 'next/router'
 import { Load } from '../../components/Load'
+import Modal from '../../components/Modal'
 // import { signIn, useSession } from 'next-auth/client'
 
 export default function Login() {
@@ -39,13 +40,16 @@ export default function Login() {
 
   return (
     <>
+      <Modal
+        msg="Login is disabled for the sample"
+      />
       <h1 className="my-4 display-3">Login</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Form.Group>
           <Envelope className="mr-3 mb-1" size={30} />
           <Form.Label>Email</Form.Label>
           <Controller
-            render={({ field }) => <Form.Control {...field} type="email" placeholder="name@example.com" />}
+            render={({ field }) => <Form.Control {...field} type="email" placeholder="name@example.com" disabled />}
             control={control}
             name="email"
             defaultValue=""
@@ -57,7 +61,7 @@ export default function Login() {
           <Key className="mr-3 mb-1" size={30} />
           <Form.Label>Password</Form.Label>
           <Controller
-            render={({ field }) => <Form.Control {...field} type="password" placeholder="Password" />}
+            render={({ field }) => <Form.Control {...field} type="password" placeholder="Password" disabled />}
             control={control}
             name="password"
             

@@ -1,7 +1,7 @@
 website:
   component: '@serverless/website'
   inputs:
-    bucketName: stat-sample.codadash.com
+    bucketName: sam
     env:
       NEXT_PUBLIC_BUILD_ID: ${env.BUILD_ID}
     code:

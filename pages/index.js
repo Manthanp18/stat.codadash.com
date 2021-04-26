@@ -8,6 +8,7 @@ import axios from 'axios'
 
 import { Load } from '../components/Load'
 import Doughnut from '../components/Doughnut'
+import Modal from '../components/Modal'
 import Bars from '../components/Bars'
 import History from '../components/History'
 import Detail from '../components/Detail'
@@ -40,6 +41,7 @@ export default function index() {
 
   return (
     <>
+      
       <Row>
         <Col lg={8}>
           <div className={`${!screen.includes('small') && 'p-5'} mt-3`}>
@@ -53,6 +55,9 @@ export default function index() {
         </Col>
       </Row>
       <>
+        <Modal
+          msg="This is a sample of a financial tracking application. Please have a look around. If you are interested in using the app. You can self-host it following the inscructions found at the github page"
+        />
         <Tabs
           id="tab"
           activeKey={key}

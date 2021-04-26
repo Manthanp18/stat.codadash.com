@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 // import { signIn, useSession } from 'next-auth/client'
 import { Load } from '../../components/Load'
 import Toast from '../../components/Toast'
+import Modal from '../../components/Modal'
 import axios from 'axios'
 
 export default function Signup() {
@@ -69,12 +70,15 @@ export default function Signup() {
 
   return (
     <>
+      <Modal
+        msg="Signup is disabled for the sample"
+      />
       <h1 className="display-3 mt-3">Sign Up</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Envelope className="mr-3 mb-2" size={30} />
         <Form.Label>Email</Form.Label>
         <Controller
-          render={({ field }) => <Form.Control {...field} type="email" placeholder="name@example.com" />}
+          render={({ field }) => <Form.Control {...field} type="email" placeholder="name@example.com" disabled />}
           control={control}
           name="email"
           defaultValue=""
@@ -99,7 +103,7 @@ export default function Signup() {
         <Person className="mr-3 mb-2" size={30} />
         <Form.Label>Alias</Form.Label>
         <Controller
-          render={({ field }) => <Form.Control {...field} placeholder="Alias" />}
+          render={({ field }) => <Form.Control {...field} placeholder="Alias" disabled />}
           control={control}
           name="alias"
           defaultValue=""
@@ -113,7 +117,7 @@ export default function Signup() {
         <Key className="mr-3 mb-1" size={30} />
         <Form.Label>Password</Form.Label>
         <Controller
-          render={({ field }) => <Form.Control {...field} type="password" placeholder="Password" />}
+          render={({ field }) => <Form.Control {...field} type="password" placeholder="Password" disabled />}
           control={control}
           name="password"
           
@@ -129,7 +133,7 @@ export default function Signup() {
         <Key className="mr-3 mb-1" size={30} />
         <Form.Label>Confirm Password</Form.Label>
         <Controller
-          render={({ field }) => <Form.Control {...field} type="password" placeholder="Confirm Password" />}
+          render={({ field }) => <Form.Control {...field} type="password" placeholder="Confirm Password" disabled />}
           control={control}
           name="confirmPass"
           
