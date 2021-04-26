@@ -52,7 +52,7 @@ skip if you wish to use Mongo Atlas for your database
 > `npm install`
 
 ## (optional) Change Port
-change the listen port @server.js line 23 replace both occurances of 3005 with your new port 
+change the listen port @server.js line 23 replace both occurances of 3005 with your new port. Also ensure NEXT_AUTH_URL in your .env file is updated if hosting locally.
 ```js
   }).listen(3005, (err) => {
     if (err) throw err
