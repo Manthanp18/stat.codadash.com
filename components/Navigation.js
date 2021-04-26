@@ -3,10 +3,10 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/client'
+// import { useSession } from 'next-auth/client'
 
 export default function Navigation() {
-  const [session, loading] = useSession()
+  // const [session, loading] = useSession()
   const router = useRouter()
 
   return (
@@ -15,26 +15,18 @@ export default function Navigation() {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="ml-auto">
-          {session ? (
             <>
-              {session.user.email === 'codabool@pm.me' &&
-                <Link href="/admin" >
-                  <div className={`${router.asPath === '/admin' && 'active'} nav-link`}>
-                    Admin
-                  </div>
-                </Link>
-              }
               <Link href="/">
                 <div className={`${router.asPath === '/' && 'active'} nav-link`}>
                   Charts
                 </div>
               </Link>
-              <Link href="/docs">
-                <div className={`${router.asPath === '/docs' && 'active'} nav-link`}>
-                  Docs
+              <Link href="/about">
+                <div className={`${router.asPath === '/about' && 'active'} nav-link`}>
+                  About
                 </div>
               </Link>
-              <Link href="/auth/logout">
+              {/* <Link href="/auth/logout">
                 <div
                   className={`${
                     router.asPath === '/auth/logout' && 'active'
@@ -42,9 +34,7 @@ export default function Navigation() {
                 >
                   Logout
                 </div>
-              </Link>
-            </>
-          ) : (
+              </Link> */}
             <Link href="/auth/login">
               <div
                 className={`${
@@ -54,7 +44,7 @@ export default function Navigation() {
                 Login
               </div>
             </Link>
-          )}
+          </>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

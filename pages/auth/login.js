@@ -6,10 +6,10 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import { useRouter } from 'next/router'
 import { Load } from '../../components/Load'
-import { signIn, useSession } from 'next-auth/client'
+// import { signIn, useSession } from 'next-auth/client'
 
 export default function Login() {
-  const [session, loading] = useSession()
+  // const [session, loading] = useSession()
   const [error, setError] = useState(null)
   
   const { handleSubmit, formState: { errors }, control } = useForm({ mode: 'onSubmit'})
@@ -22,19 +22,20 @@ export default function Login() {
   }, [router.query.error])
 
   const onSubmit = async data => {
-    console.log(data)
-    if (data.email && data.password) {
-      signIn('credentials', {
-        email: data.email,
-        password: data.password
-      })
-    }
+    alert('sample environment')
+    // console.log(data)
+    // if (data.email && data.password) {
+    //   signIn('credentials', {
+    //     email: data.email,
+    //     password: data.password
+    //   })
+    // }
   }
 
-  if (session) {
-    router.push('/')
-    return <Load />
-  }
+  // if (session) {
+  //   router.push('/')
+  //   return <Load />
+  // }
 
   return (
     <>

@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import { useRouter } from 'next/router'
-import { signIn, useSession } from 'next-auth/client'
+// import { signIn, useSession } from 'next-auth/client'
 import { Load } from '../../components/Load'
 import Toast from '../../components/Toast'
 import axios from 'axios'
@@ -14,7 +14,7 @@ import axios from 'axios'
 export default function Signup() {
   const [password, setPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const [session, loading] = useSession()
+  // const [session, loading] = useSession()
   const [success, setSuccess] = useState(false)
   const [show, setShow] = useState(false)
   const [allow, setAllow] = useState(false)
@@ -35,36 +35,37 @@ export default function Signup() {
       })
       return
     } 
-    setSubmitting(true)
-    console.log(data)
-      bcrypt.hash(data.password, 10, (err, hash) => {
-        axios.post('/api/user', {
-            email: data.email,
-            password: hash,
-            alias: data.alias
-          })
-          .then((res) => {
-            console.log('success', res.data)
-            setSuccess(true)
-            signIn('credentials', {
-              email: data.email,
-              password: data.password,
-              callbackUrl: ''
-            })
-          })
-          .catch((err) => {
-            console.error(err.response.data.msg)
-            if (err.response.data.msg.includes('already exists')) {
-              setShow(true)
-            } else if (err.response.data.msg.includes('Email not on allow list')) {
-              setAllow(true)
-            }
-          })
-        .finally(() => setSubmitting(false))
-      })
+    alert('sample environment')
+    // setSubmitting(true)
+    // console.log(data)
+    //   bcrypt.hash(data.password, 10, (err, hash) => {
+    //     axios.post('/api/user', {
+    //         email: data.email,
+    //         password: hash,
+    //         alias: data.alias
+    //       })
+    //       .then((res) => {
+    //         console.log('success', res.data)
+    //         setSuccess(true)
+    //         signIn('credentials', {
+    //           email: data.email,
+    //           password: data.password,
+    //           callbackUrl: ''
+    //         })
+    //       })
+    //       .catch((err) => {
+    //         console.error(err.response.data.msg)
+    //         if (err.response.data.msg.includes('already exists')) {
+    //           setShow(true)
+    //         } else if (err.response.data.msg.includes('Email not on allow list')) {
+    //           setAllow(true)
+    //         }
+    //       })
+    //     .finally(() => setSubmitting(false))
+    //   })
   }
 
-  if (session) router.push('/')
+  // if (session) router.push('/')
 
   return (
     <>

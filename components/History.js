@@ -8,13 +8,13 @@ import { useForm, Controller } from 'react-hook-form'
 import { format } from 'timeago.js'
 import axios from 'axios'
 
-export default function History({ data, getData, session}) {
+export default function History({ data, getData}) {
   const { handleSubmit, formState: { errors }, control, setError, reset } = useForm()
   const [readable, setReadable] = useState(false)
   const [admin, setAdmin] = useState(false)
   const [spin, setSpin] = useState(false)
 
-  useEffect(() => setAdmin(session?.user.email === 'codabool@pm.me'), [session])
+  // useEffect(() => setAdmin(session?.user.email === 'codabool@pm.me'), [session])
 
   useEffect(() =>  {
     setSpin(true)
@@ -22,15 +22,17 @@ export default function History({ data, getData, session}) {
   }, [data])
 
   function remove(id) {
-    axios.delete('/api/statement', { params: { id } })
-      .then(res => {
-        console.log(res.data)
-        getData()
-      })
-      .catch(err => console.error(err.response.data.msg))
+    alert('sample environment')
+    // axios.delete('/api/statement', { params: { id } })
+    //   .then(res => {
+    //     console.log(res.data)
+    //     getData()
+    //   })
+    //   .catch(err => console.error(err.response.data.msg))
   }
 
   function onSubmit(input) {
+    
     if (!input.amount) {
       setError("amount", {
         type: "manual",
@@ -38,11 +40,12 @@ export default function History({ data, getData, session}) {
       })
       return
     } 
-
-    axios.post('/api/statement', input)
-      .then(() => getData())
-      .catch(err => console.log(err)) // Getting err.response undefined err.response.data.msg
-      .finally(() => reset({amount: '', description: ''}))
+    alert('sample environment')
+    
+    // axios.post('/api/statement', input)
+    //   .then(() => getData())
+    //   .catch(err => console.log(err)) // Getting err.response undefined err.response.data.msg
+    //   .finally(() => reset({amount: '', description: ''}))
   }
 
   function runningTotal(index) {

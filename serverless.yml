@@ -1,0 +1,9 @@
+website:
+  component: '@serverless/website'
+  inputs:
+    bucketName: stat.codadash.com
+    env:
+      NEXT_PUBLIC_BUILD_ID: ${env.BUILD_ID}
+    code:
+      src: ./out
+      hook: npm run deploy

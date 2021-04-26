@@ -2,13 +2,13 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
-import { signOut, useSession } from 'next-auth/client'
-import { Load, isLoad } from '../components/Load'
+// import { signOut, useSession } from 'next-auth/client'
+import { Load } from '../../components/Load'
 
 export default function Logout() {
-  const [session, loading] = useSession()
+  // const [session, loading] = useSession()
 
-  if (isLoad(session, loading, true)) return <Load />
+  // if (isLoad(session, loading, true)) return <Load />
 
   return (
     <>
@@ -21,9 +21,7 @@ export default function Logout() {
           style={{ width: '80%' }}
           variant="warning"
           type="submit"
-          onClick={() => {
-            signOut({ callbackUrl: '/' })
-          }}
+          onClick={() => alert('sample environment')}
         >
           Logout
         </Button>
