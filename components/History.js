@@ -66,7 +66,7 @@ export default function History({ data, getData, session}) {
   //   return {}
   // }
   function getClass(text) {
-    if (text.includes('OF')) {
+    if (text.includes('SOME_SPECIFIC_TAG_HERE')) {
       return 'text-primary'
     }
     return ''
