@@ -6,8 +6,9 @@ export default applyMiddleware(async (req, res) => {
     const { method, body, query } = req
     if (method === 'POST') {
       const allowedList = process.env.ALLOWLISTED_EMAILS || ''
-      const arr = allowedList.split(',') || []
-      const allowed = arr.includes(body.email)
+      let arr = allowedList.split(',') || []
+      arr = arr.map(email => email.toLowerCase())
+      const allowed = arr.includes(body.email.toLowerCase())
       if (!allowed) throw 'Email not on allow list'
       await User.create({
         email: body.email,
