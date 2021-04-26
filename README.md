@@ -3,6 +3,10 @@
 This is a self-host financial tracker. Ideal for single goal tracking with multiple people involved making contributions.
 The app is built using Next.js, Mongodb and uses next-auth for authentication.
 
+![pie](https://github.com/codabool/stat.codadash.com/blob/sample/public/image/pie.jpg?raw=true)
+
+Open Source and free. Own your own data, and secure it with login based authentication. Deploy it yourself locally or use the Vercel platform combined with MongoDB Atlas.
+
 ![table](https://github.com/codabool/stat.codadash.com/blob/sample/public/image/table.jpg?raw=true)
 
 # Self-host
