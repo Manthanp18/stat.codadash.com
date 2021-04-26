@@ -27,12 +27,11 @@ export default function index() {
   if (isLoad(session, loading, true)) return <Load msg='Please reload the page' />
 
   async function getData() {
-    console.log('grab data if session', session)
     if (!session?.id) return
     const all = await axios.get('/api/statement')
       .then(res => res.data)
       .catch(err => {console.error(err); return}) // Getting err.response undefined err.response.data.msg
-    console.log(all)
+    // console.log(all)
     setData(all)
   }  
 
@@ -55,9 +54,10 @@ export default function index() {
           id="tab"
           activeKey={key}
           onSelect={(k) => setKey(k)}
+          className="mt-2"
         >
           <Tab eventKey="history" title="History">
-            <History data={data} getData={getData} />
+            <History data={data} getData={getData} session={session} />
           </Tab>
           <Tab eventKey="detail" title="Detail">
             <Detail />

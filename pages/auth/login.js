@@ -22,7 +22,7 @@ export default function Login() {
   }, [router.query.error])
 
   const onSubmit = async data => {
-    console.log(data)
+    // console.log(data)
     if (data.email && data.password) {
       signIn('credentials', {
         email: data.email,

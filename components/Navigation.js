@@ -29,11 +29,11 @@ export default function Navigation() {
                   Charts
                 </div>
               </Link>
-              <Link href="/docs">
+              {/* <Link href="/docs">
                 <div className={`${router.asPath === '/docs' && 'active'} nav-link`}>
                   Docs
                 </div>
-              </Link>
+              </Link> */}
               <Link href="/auth/logout">
                 <div
                   className={`${

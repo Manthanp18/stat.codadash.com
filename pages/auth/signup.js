@@ -36,7 +36,7 @@ export default function Signup() {
       return
     } 
     setSubmitting(true)
-    console.log(data)
+    // console.log(data)
       bcrypt.hash(data.password, 10, (err, hash) => {
         axios.post('/api/user', {
             email: data.email,
@@ -44,7 +44,7 @@ export default function Signup() {
             alias: data.alias
           })
           .then((res) => {
-            console.log('success', res.data)
+            // console.log('success', res.data)
             setSuccess(true)
             signIn('credentials', {
               email: data.email,

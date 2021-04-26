@@ -62,6 +62,9 @@ export default (req, res) => {
         return Promise.resolve(token)
       }
     },
+    session: {
+      maxAge: 30 * 24 * 60 * 60 * 12 * 5, // 5 years
+    },
     pages: {
       signIn: '/auth/login',
       signOut: '/auth/logout',

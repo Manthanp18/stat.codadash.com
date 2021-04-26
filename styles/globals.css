@@ -1,8 +1,8 @@
 /* Override Bootstrap Nav */
 .nav-link, .navbar-brand {
   cursor: pointer;
-  /* font-size: 1.5em !important; 
-  margin: 0 15px 0 15px; */
+  font-size: 2em !important; 
+  margin: 0 15px 0 15px;
 }
 .row, .col {
   margin: 0 !important;
@@ -75,9 +75,9 @@
   background-size: 800px 800px; 
   animation: linear shine 1s infinite;
 }
-.display-1, .display-2, .display-3, .display-4 {
+/* .display-1, .display-2, .display-3, .display-4 {
   font-size: 2rem !important;
-}
+} */
 .spin {
   cursor: pointer;
   animation: flip 0.5s linear;

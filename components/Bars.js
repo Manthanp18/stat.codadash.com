@@ -77,7 +77,7 @@ export default function Bars({ data, screen }) {
     <>
       <Row>
         <Col md={9}>
-          <h1 className="display-4">Bars Chart</h1>
+          <h4 className="">Month View</h4>
         </Col>
         <Col md={3}>
           <Form className="pt-2">

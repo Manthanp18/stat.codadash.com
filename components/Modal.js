@@ -13,7 +13,7 @@ export default function SampleModal({msg}) {
       <Modal.Body>
         {msg}
         <hr/>
-        <div className="mx-auto text-center">
+        <div className="text-center">
           <a href="https://github.com/codabool/stat.codadash.com">Github page</a>
         </div>
       </Modal.Body>

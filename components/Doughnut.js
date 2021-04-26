@@ -45,7 +45,7 @@ export default function DoughnutChart({ data }) {
 
   return (
     <>
-      <h1 className="display-4 text-center"><Percent className="ml-2 mb-2" size={30}/> Given</h1>
+      <h1 className=" text-center" style={{fontWeight: '1'}}><Percent className="ml-2 mb-2" size={30}/> Given</h1>
       <Doughnut 
         data={chartData}
         getElementAtEvent={getElementAtEvent}
