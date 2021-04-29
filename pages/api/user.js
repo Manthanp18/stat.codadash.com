@@ -1,5 +1,6 @@
 import { User } from '../../models'
 import applyMiddleware from '../../util'
+// import { getSession } from 'next-auth/client'
 
 export default applyMiddleware(async (req, res) => {
   try {
