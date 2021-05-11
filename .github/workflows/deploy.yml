@@ -33,8 +33,6 @@ jobs:
       - name: SSH
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: appleboy/ssh-action@master
-        env:
-          PASS: ${{ secrets.PASSWORD }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -43,8 +41,7 @@ jobs:
           script: |
             cd /home/codabool/stat.codadash.com
             git pull
-            sudo systemctl restart stat
-          envs: PASS
+            systemctl restart stat
       # sudo systemctl -S ${{ secrets.PASSWORD }} restart stat
 
       - name: Configure AWS Credentials
