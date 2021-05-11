@@ -92,7 +92,7 @@ export default function History({ data, getData}) {
         <tbody>
           {data && data.raw.map((row, index) => (
             <tr key={row._id}>
-              <td>{readable ? format(row.createdAt) : new Date(data.raw[0].createdAt).toDateString()}</td>
+              <td>{readable ? format(row.createdAt) : new Date(row.createdAt).toDateString()}</td>
               <td className={`${getClass(row.description)}`}>{row.description}</td>
               <td>{row.alias}</td>
               <td>
