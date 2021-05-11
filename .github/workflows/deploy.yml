@@ -27,7 +27,11 @@ jobs:
 
       - name: runs on main
         if: "${{ steps.extract.outputs.stage }} == main"
-        run: echo "hi"
+        run: echo "hi main"
+
+      - name: runs on sample
+        if: "${{ steps.extract.outputs.stage }} == sample"
+        run: echo "hi sample"
 
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v1
