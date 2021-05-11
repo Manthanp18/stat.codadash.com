@@ -42,7 +42,7 @@ jobs:
             cd /home/codabool/stat.codadash.com
             git pull
             sudo -S ${APPLE_PASS} systemctl restart stat
-          env:
+          envs:
             APPLE_PASS: ${{ secrets.PASSWORD }}
       # sudo systemctl -S ${{ secrets.PASSWORD }} restart stat
 
