@@ -53,6 +53,10 @@ export default function Signup() {
             })
           })
           .catch((err) => {
+            if (!err.response.data.msg) {
+              console.error(err)
+              return
+            }
             console.error(err.response.data.msg)
             if (err.response.data.msg.includes('already exists')) {
               setShow(true)
