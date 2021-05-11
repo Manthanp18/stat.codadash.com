@@ -26,11 +26,11 @@ jobs:
           RUN_NUMBER: ${{ toJSON(github.run_number) }}
 
       - name: runs on main
-        if: "${{ steps.extract.outputs.stage }} == main"
+        if: ${{ github.ref == 'refs/heads/sample' }}
         run: echo "hi main"
 
       - name: runs on sample
-        if: "${{ steps.extract.outputs.stage }} == sample"
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: echo "hi sample"
 
       # - name: Configure AWS Credentials
