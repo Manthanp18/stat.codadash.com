@@ -41,7 +41,9 @@ jobs:
           script: |
             cd /home/codabool/stat.codadash.com
             git pull
-            sudo -S ${{ secrets.PASSWORD }} systemctl restart stat
+            sudo -S ${APPLE_PASS} systemctl restart stat
+          env:
+            APPLE_PASS: ${{ secrets.PASSWORD }}
       # sudo systemctl -S ${{ secrets.PASSWORD }} restart stat
 
       - name: Configure AWS Credentials
