@@ -42,7 +42,7 @@ jobs:
             cd /home/codabool/stat.codadash.com
             git pull
             sudo -S ${{ secrets.PASSWORD }} systemctl restart stat
-            sudo systemctl -S ${{ secrets.PASSWORD }} restart stat
+      # sudo systemctl -S ${{ secrets.PASSWORD }} restart stat
 
       - name: Configure AWS Credentials
         if: ${{ github.ref == 'refs/heads/sample' }}
