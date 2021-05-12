@@ -39,9 +39,10 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           debug: true
           script: |
+            sudo su
             cd /home/codabool/stat.codadash.com
             git pull
-            sudo systemctl restart stat
+            systemctl restart stat
       # sudo systemctl -S ${{ secrets.PASSWORD }} restart stat
 
       - name: Configure AWS Credentials
