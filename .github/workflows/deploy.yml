@@ -40,9 +40,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          envs: 
-            - PASS
-            - LPASS
+          # envs: PASS
           script: |
             echo "$LPASS" | sudo -S su codabool
             cd /home/codabool/stat.codadash.com
