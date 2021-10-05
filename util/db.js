@@ -2,12 +2,7 @@ import mongoose from 'mongoose'
 
 export async function connectDB() {
   if (mongoose.connection.readyState >= 1) return
-  return mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-      useCreateIndex: true
-    },
+  return mongoose.connect(process.env.MONGODB_URI, null,
     () => console.log('connected!')
   )
 }

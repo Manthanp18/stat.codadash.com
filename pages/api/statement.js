@@ -10,7 +10,15 @@ export default applyMiddleware(async (req, res) => {
     if (method === 'POST') {
       const user = await User.findOne({ email: session.user.email.toLowerCase() })
       if (!user) throw `Could Not find ${session.user.email}`
-      const statement = await Statement.create({ user: user.id, alias: user.alias, description: body.description, amount: Number(body.amount)})
+      if (!body.date) throw `date ${body.date}`
+      console.log('body.date', body.date)
+      const statement = await Statement.create({ 
+        user: user.id, 
+        alias: user.alias, 
+        description: body.description, 
+        amount: Number(body.amount), 
+        createdAt: body.date
+      })
         .catch(err => {throw err._message})
       res.status(200).json(statement)
     } else if (method === 'GET') {

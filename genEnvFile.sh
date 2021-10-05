@@ -21,10 +21,10 @@ echo $mongoStartLine$mongoPassword$mongoEndLine
 echo "MONGO_PASS="$mongoPassword
 echo "NEXTAUTH_SECRET="$nextAuthSecret
 echo "ALLOWLISTED_EMAILS="$allowList
-echo "NEXT_AUTH_URL=http://localhost:"$port
+echo "NEXTAUTH_URL=http://localhost:"$port
 
 echo $mongoStartLine$mongoPassword$mongoEndLine > .env
 echo "MONGO_PASS="$mongoPassword >> .env
 echo "NEXTAUTH_SECRET="$nextAuthSecret >> .env
 echo "ALLOWLISTED_EMAILS="$allowList >> .env
-echo "NEXT_AUTH_URL=http://localhost:"$port >> .env
+echo "NEXTAUTH_URL=http://localhost:"$port >> .env

@@ -29,13 +29,13 @@ MONGODB_URI=
 MONGO_PASS=
 NEXTAUTH_SECRET=
 ALLOWLISTED_EMAILS=
-NEXT_AUTH_URL=
+NEXTAUTH_URL=
 ```
 
 ## Or use the auto env script (Always read scripts before running)
 > `sudo genEnvFile.sh`
 
-The NEXT_AUTH_URL environment variable is used for callbacks and all authentication api calls. If you going to be using outside of localhost this will need to be the full production url e.g. https://my.vercel.app.com
+The NEXTAUTH_URL environment variable is used for callbacks and all authentication api calls. If you going to be using outside of localhost this will need to be the full production url e.g. https://my.vercel.app.com
 
 ## Create the database
 Please keep in mind that this guide sets up a database WITHOUT ssl (insecure transit) and app => database traffic should be local and in a secure network. If you want to instead use a cloud host for the Mongo database, I would recommend Mongo Atlas, they offer a 5GB free tier which should be more than enough. Make sure to set a strong password, and add the ip of the application to the network allow list.
@@ -52,7 +52,7 @@ skip if you wish to use Mongo Atlas for your database
 > `npm install`
 
 ## (optional) Change Port
-change the listen port @server.js line 23 replace both occurances of 3005 with your new port. Also ensure NEXT_AUTH_URL in your .env file is updated if hosting locally.
+change the listen port @server.js line 23 replace both occurances of 3005 with your new port. Also ensure NEXTAUTH_URL in your .env file is updated if hosting locally.
 ```js
   }).listen(3005, (err) => {
     if (err) throw err

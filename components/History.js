@@ -5,11 +5,13 @@ import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import { PlusSquare, XSquare, Calendar3, ArrowClockwise } from 'react-bootstrap-icons'
 import { useForm, Controller } from 'react-hook-form'
+import DayPickerInput from "react-day-picker/DayPickerInput"
 import { format } from 'timeago.js'
 import axios from 'axios'
+import "react-day-picker/lib/style.css"
 
 export default function History({ data, getData, session}) {
-  const { handleSubmit, formState: { errors }, control, setError, reset } = useForm()
+  const { handleSubmit, formState: { errors }, control, setError, reset, setValue } = useForm()
   const [readable, setReadable] = useState(false)
   const [admin, setAdmin] = useState(false)
   const [spin, setSpin] = useState(false)
@@ -37,7 +39,7 @@ export default function History({ data, getData, session}) {
         message: "No Amount Provided"
       })
       return
-    } 
+    }
 
     axios.post('/api/statement', input)
       .then(() => getData())
@@ -54,6 +56,12 @@ export default function History({ data, getData, session}) {
       total -= data.raw[i].amount
     }
     return total
+  }
+
+  function onDayChange(e) {
+    if (e) {
+      setValue('date', e)
+    }
   }
 
   // dynamic row colors 
@@ -109,6 +117,14 @@ export default function History({ data, getData, session}) {
                     render={({ field }) => <Form.Control {...field} placeholder="Description" />}
                     control={control}
                     name="description"
+                    defaultValue=""
+                  />
+                </td>
+                <td>
+                  <Controller
+                    render={({ field }) => <DayPickerInput {...field} placeholder="DD/MM/YYYY" format="DD/MM/YYYY" onDayChange={onDayChange} />}
+                    control={control}
+                    name="date"
                     defaultValue=""
                   />
                 </td>
