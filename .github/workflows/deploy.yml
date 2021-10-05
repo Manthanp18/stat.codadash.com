@@ -35,13 +35,16 @@ jobs:
         uses: appleboy/ssh-action@master
         env: 
           PASS: ${{ secrets.PASSWORD }}
+          LPASS: ${{ secrets.LOCAL_PASSWORD }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          envs: PASS
+          envs: 
+            - PASS
+            - LPASS
           script: |
-            echo "$PASS" | sudo -S su codabool
+            echo "$LPASS" | sudo -S su codabool
             cd /home/codabool/stat.codadash.com
             git pull
             echo "$PASS" | sudo -S systemctl restart stat.codadash.com
