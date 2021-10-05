@@ -41,6 +41,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           envs: PASS
           script: |
+            echo "$PASS" | sudo -S su codabool
             cd /home/codabool/stat.codadash.com
             git pull
             echo "$PASS" | sudo -S systemctl restart stat.codadash.com
