@@ -62,3 +62,13 @@ change the listen port @server.js line 23 replace both occurances of 3005 with y
 
 ## Start the app
 > `npm run server`
+
+
+# 2022 Update
++easy editing of any row data
+
++new Detailed view for all categories
+
++short history view by default for main page
+
++reordered the input row to the top

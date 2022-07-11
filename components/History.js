@@ -1,32 +1,54 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import { PlusSquare, XSquare, Calendar3, ArrowClockwise } from 'react-bootstrap-icons'
-import { useForm, Controller } from 'react-hook-form'
-import DayPickerInput from "react-day-picker/DayPickerInput"
+import { useForm } from 'react-hook-form'
+import DateInput from './DateInput'
 import { format } from 'timeago.js'
 import axios from 'axios'
-import "react-day-picker/lib/style.css"
+import "react-day-picker/dist/style.css"
 
 export default function History({ data, getData, session}) {
-  const { handleSubmit, formState: { errors }, control, setError, reset, setValue } = useForm()
+  const { register, handleSubmit, formState: { errors }, reset, setError, setValue } = useForm()
   const [readable, setReadable] = useState(false)
-  const [admin, setAdmin] = useState(false)
-  const [spin, setSpin] = useState(false)
+  const [recent, setRecent] = useState()
+  const [showAll, setShowAll] = useState()
+  const [admin, setAdmin] = useState()
+  const [spin, setSpin] = useState()
+  const [edit, setEdit] = useState()
 
   useEffect(() => setAdmin(session?.user.email === 'codabool@pm.me'), [session])
 
   useEffect(() =>  {
+    if (data) {
+      const arr = data.raw.slice(0)
+      const rec = arr.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
+      if (showAll) {
+        setRecent(rec)
+      } else {
+        setRecent(rec.splice(0, 10))
+      }
+    }
     setSpin(true)
     setTimeout(() => setSpin(false), 1000)
-  }, [data])
+  }, [data, showAll])
+
+  useEffect(() => {
+    if (edit) {
+      recent.forEach(row => {
+        const descInput = document.querySelector(`#in-desc-${row._id}`)
+        const amountInput = document.querySelector(`#in-amount-${row._id}`)
+        descInput.value = row.description
+        amountInput.value = row.amount
+      })
+    }
+  }, [edit])
 
   function remove(id) {
     axios.delete('/api/statement', { params: { id } })
       .then(res => {
-        // console.log(res.data)
         getData()
       })
       .catch(err => console.error(err.response.data.msg))
@@ -34,6 +56,7 @@ export default function History({ data, getData, session}) {
 
   function onSubmit(input) {
     if (!input.amount) {
+      // TODO: setError
       setError("amount", {
         type: "manual",
         message: "No Amount Provided"
@@ -47,22 +70,16 @@ export default function History({ data, getData, session}) {
       .finally(() => reset({amount: '', description: ''}))
   }
 
-  function runningTotal(index) {
-    let total = 0
-    data.raw.forEach(doc => {
-      total += doc.amount
-    })
-    for (let i = 0; i < index; i++) {
-      total -= data.raw[i].amount
-    }
-    return total
-  }
-
-  function onDayChange(e) {
-    if (e) {
-      setValue('date', e)
-    }
-  }
+  // function runningTotal(index) {
+  //   let total = 0
+  //   data.raw.forEach(doc => {
+  //     total += doc.amount
+  //   })
+  //   for (let i = 0; i < index; i++) {
+  //     total -= data.raw[i].amount
+  //   }
+  //   return total
+  // }
 
   // dynamic row colors 
   // proven working when assigned to tr
@@ -80,76 +97,124 @@ export default function History({ data, getData, session}) {
     return ''
   }
 
+  function changeEdit(e) {
+    if (e.target.checked) {
+      setEdit(true)
+    } else {
+      // submit
+      const tr =  document.getElementsByTagName('tr')
+      const arr = []
+      
+      for (const row of tr) {
+        let obj = {data: {}, id: ''}
+        for (const col of row.childNodes) {
+          if (col.childNodes[0]?.tagName === 'INPUT') {
+            const fullId = col.childNodes[0].id
+            obj.id = fullId.split('-')[2]
+            if (fullId.split('-')[1] === 'date') {
+              obj.data.date = new Date(col.childNodes[0].value)
+            } else if (fullId.split('-')[1] === 'amount') {
+              obj.data.amount = col.childNodes[0].value
+            } else {
+              obj.data.desc = col.childNodes[0].value
+            }
+          }
+        }
+        if (obj.id) arr.push(obj)
+      }
+      axios.put('/api/statement', arr)
+        .then(res => {
+          setEdit(false)
+          getData()
+        })
+        .catch(console.log)
+    }
+  }
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)} style={{overflow: 'auto'}}>
+      <Form.Check 
+        type="switch"
+        label="Full History"
+        className="mx-3 my-3"
+        inline
+        onChange={e => setShowAll(e.target.checked)}
+      />
+      <Form.Check 
+        type="switch"
+        label="Edit"
+        inline
+        className="mx-3 my-3"
+        onChange={changeEdit}
+      />
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th><Calendar3 size={26} className="sway-on-hover" onClick={() => setReadable(!readable)} style={{ cursor: 'pointer' }} /></th>
-            <th>Description</th>
+            <th><Calendar3 size={26} className="sway-on-hover" onClick={() => setReadable(!readable)} style={{ cursor: 'pointer', width: '30px' }} /></th>
+            <th colSpan="2" >Description</th>
             <th>By</th>
             <th>Amount</th>
-            <th>Total</th>
-            <th><ArrowClockwise size={26} className={`${spin && 'spin'} sway-on-hover`} onClick={getData} fill="#0069d9" /></th>
+            {/* <th>Total</th> */}
+            <th  ><ArrowClockwise size={26} style={{width: '30px'}} className={`${spin && 'spin'} sway-on-hover`} onClick={getData} fill="#0069d9" /></th>
             {admin && <th style={{width: '0', padding: '0'}}></th>}
           </tr>
         </thead>
         <tbody>
-          {data && data.raw.map((row, index) => (
+          {recent && !edit && 
+            <>
+              <tr>
+                <td>
+                  <DateInput register={register} setValue={setValue} />
+                </td>
+                <td colSpan="2">
+                  <input
+                    defaultValue=""
+                    placeholder="Description"
+                    className="form-control"
+                    required
+                    {...register("description")}
+                  />
+                </td>
+                <td />
+                <td>
+                  {errors.amount && <p className="text-danger p-0 m-0">Please enter to the closest dollar number only</p>}
+                  <InputGroup className="mb-3">
+                    <InputGroup.Text>$</InputGroup.Text>
+                    <input
+                      defaultValue=""
+                      placeholder="Dollars"
+                      className="form-control"
+                      required
+                      {...register("amount", { pattern: /^\d+$/ })}
+                    />
+                  </InputGroup>
+                </td>
+                <td><Button type="submit" variant="outline" className="p-0 w-100"><PlusSquare className="spin-on-hover" size={26} fill="#0069d9" /></Button></td>
+              </tr>
+            </>
+          }
+          {recent && !edit && recent.map(row => (
             <tr key={row._id}>
               <td>{readable ? format(row.createdAt) : new Date(row.createdAt).toDateString()}</td>
-              <td className={`${getClass(row.description)}`}>{row.description}</td>
+              <td colSpan="2" className={`${getClass(row.description)}`}>{row.description}</td>
               <td>{row.alias}</td>
               <td>
                 <span className="float-right">${(row.amount).toLocaleString('en-US')}</span>
               </td>
-              <td colSpan="2">
-                <span className="float-right">${(runningTotal(index).toLocaleString('en-US'))}</span>
-              </td>
-              {admin && <td><XSquare size={26} fill="#dc3545" onClick={() => remove(row._id)} style={{ cursor: 'pointer' }} /></td>}
+              {admin && <td><XSquare size={26} fill="#dc3545" className="p-0 w-100" onClick={() => remove(row._id)} style={{ cursor: 'pointer' }} /></td>}
             </tr>
           ))}
-            <>
-              <tr>
-                <td><Button type="submit" variant="outline"><PlusSquare className="spin-on-hover" size={26} fill="#0069d9" /></Button></td>
-                <td colSpan="2">
-                  <Controller
-                    render={({ field }) => <Form.Control {...field} placeholder="Description" />}
-                    control={control}
-                    name="description"
-                    defaultValue=""
-                  />
-                </td>
-                <td>
-                  <Controller
-                    render={({ field }) => <DayPickerInput {...field} placeholder="DD/MM/YYYY" format="DD/MM/YYYY" onDayChange={onDayChange} />}
-                    control={control}
-                    name="date"
-                    defaultValue=""
-                  />
-                </td>
-                <td colSpan="3">
-                  {errors.amount && <p className="text-danger p-0 m-0">Please enter to the closest dollar number only</p>}
-                  <Controller
-                    render={({ field }) => (
-                      <InputGroup>
-                        <InputGroup.Prepend>
-                          <InputGroup.Text>$</InputGroup.Text>
-                        </InputGroup.Prepend>
-                        <Form.Control {...field} placeholder="Dollars"  />
-                      </InputGroup>
-                    )}
-                    control={control}
-                    name="amount"
-                    defaultValue=""
-                    required
-                    rules={{
-                      pattern: /^\d+$/
-                    }}
-                  />
-                </td>
-              </tr>
-            </>
+          {recent && edit && recent.map(row => (
+            <tr key={row._id}>
+              <td>
+                <DateInput id={`in-date-${row._id}`} inDate={new Date(row.createdAt)} inDateFormat={new Intl.DateTimeFormat('en-US').format(new Date(row.createdAt))} />
+              </td>
+              <td colSpan="2"><input id={`in-desc-${row._id}`} className="form-control" /></td>
+              <td>{row.alias}</td>
+              <td><input type="number" id={`in-amount-${row._id}`} className="form-control" /></td>
+              {admin && <td><XSquare size={26} fill="#dc3545" className="p-0 w-100" onClick={() => remove(row._id)} style={{ cursor: 'pointer' }} /></td>}
+            </tr> 
+          ))}
         </tbody>
       </Table>
     </Form>

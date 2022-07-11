@@ -1,19 +1,13 @@
 import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
+import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from 'bcryptjs'
 import { connectDB } from '../../../util/db'
 import { User } from '../../../models'
 
-export const config = {
-  api: {
-    externalResolver: true
-  }
-}
-
-export default (req, res) => {
+export default (req, res) => (
   NextAuth(req, res, {
     providers: [
-      Providers.Credentials({
+      CredentialsProvider({
         name: 'Credentials',
         credentials: {
           email: { label: 'Email', type: 'email', placeholder: 'Email' },
@@ -51,26 +45,26 @@ export default (req, res) => {
         }
       })
     ],
-    callbacks: {
-      session: async (session, user) => {
-        // console.log((session, user))
-        if (session) session.id = user.id
-        return Promise.resolve(session)
-      },
-      jwt: async (token, user) => {
-        if (user) token.id = user.id
-        return Promise.resolve(token)
-      }
-    },
-    session: {
-      maxAge: 30 * 24 * 60 * 60 * 12 * 5, // 5 years
-    },
     pages: {
       signIn: '/auth/login',
       signOut: '/auth/logout',
       newUser: '/auth/signup',
-      error: '/' // Error code passed in query string as ?error=
+      error: '/auth/login', // Error code passed in query string as ?error=
     },
-    secret: process.env.NEXTAUTH_SECRET
+    debug: true,
+    session: {
+      strategy: 'jwt',
+      maxAge: 30 * 24 * 60 * 60 * 100, // 30 days
+    },
+    callbacks: {
+      async session({ session, token, user }) {
+        if (session) session.id = token.sub
+        return Promise.resolve(session)
+      },
+      async jwt({ token, user }) {
+        if (token) token.id = token.sub
+        return Promise.resolve(token)
+      }
+    }
   })
-}
+)

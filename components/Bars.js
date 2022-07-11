@@ -1,24 +1,58 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import { Load } from './Load'
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+)
+
+// example options
+// const options = {
+// }
+
+// TODO: this should be set somewhere else
 const rand = () => Math.floor(Math.random() * 255)
 
 // used https://github.com/reactchartjs/react-chartjs-2/blob/master/example/src/charts/Crazy.js as template
 export default function Bars({ data, screen }) {
-  const [clickedElement, setClickedElement] = useState('')
   const [chartData, setChartData] = useState()
   const [year, setYear] = useState(new Date().getFullYear())
+  const [yearOptions, setYearOptions] = useState([])
+  const yearSelect = useRef(null)
 
   useEffect(() => {
     if (data) genChart()
   }, [data, screen, year])
 
-  function getElementAtEvent(element) {
-    if (!element.length || !chartData) return
-    setClickedElement(chartData.labels[element[0].index])
-  }
+  useEffect(() => {
+    if (yearSelect) {
+      if (yearSelect.current) {
+        yearSelect.current.value = year
+      }
+    }
+  }, [yearOptions, year])
+
+  useEffect(() => {
+    setYear(new Date().getFullYear())
+  }, [])
+
+  if (!chartData) return <Load />
 
   function genChart() {
     if (data.length == 0) return
@@ -47,6 +81,14 @@ export default function Bars({ data, screen }) {
       }
     )) || []
 
+    const allYears = []
+    data.forEach(doc => {
+      if (!allYears.includes(doc.year)) {
+        allYears.push(doc.year)
+      }
+    })
+    
+    setYearOptions(allYears)
     setChartData({
       labels: xLabels,
       datasets: dataSets,
@@ -59,20 +101,6 @@ export default function Bars({ data, screen }) {
     }
   }
 
-  function genYearOptions() {
-    let startYear = 2021
-    let endYear = startYear
-    const optionsArr = []
-    data.forEach(doc => {
-      if (doc.year < startYear) startYear = doc.year
-      if (doc.year > endYear) endYear = doc.year
-    })
-    for (let i = startYear; i <= endYear; i++) {             
-      optionsArr.push(<option key={i} value={i}>{i}</option>)
-    }
-    return optionsArr
-  }
-
   return (
     <>
       <Row>
@@ -80,29 +108,15 @@ export default function Bars({ data, screen }) {
           <h4 className="">Month View</h4>
         </Col>
         <Col md={3}>
-          <Form className="pt-2">
-            <Form.Group controlId="year">
-              <Form.Control as="select" size="sm" custom value={year} onChange={handleYear}>
-                {genYearOptions()}
-              </Form.Control>
-            </Form.Group>
-          </Form>
+          <Form.Select className="pt-2 d-inline" style={{maxWidth: '120px'}} onChange={handleYear} ref={yearSelect}>
+            {yearOptions.length > 0 && yearOptions.map(y => (
+              <option value={y} key={y}>{y}</option>
+            ))}
+          </Form.Select>
         </Col>
       </Row>
       <Bar 
         data={chartData}
-        options={{
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: true,
-                },
-              },
-            ],
-          },
-        }}
-        getElementAtEvent={getElementAtEvent}
       />
     </>
   )

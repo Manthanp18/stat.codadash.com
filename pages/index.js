@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/client'
+import { useSession } from 'next-auth/react'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Tabs from 'react-bootstrap/Tabs'
@@ -14,7 +14,7 @@ import Detail from '../components/Detail'
 import useScreen from '../constants/useScreen'
 
 export default function index() {
-  const [session, loading] = useSession()
+  const { data: session, status } = useSession()
   const [key, setKey] = useState('history')
   const [data, setData] = useState()
   let screen = useScreen()
@@ -24,7 +24,7 @@ export default function index() {
     if (session) getData()
   }, [session])
 
-  if (isLoad(session, loading, true)) return <Load msg='Please reload the page' />
+  if (isLoad(session, status, true)) return <Load msg='Please reload the page' />
 
   async function getData() {
     if (!session?.id) return
@@ -60,7 +60,7 @@ export default function index() {
             <History data={data} getData={getData} session={session} />
           </Tab>
           <Tab eventKey="detail" title="Detail">
-            <Detail />
+            <Detail data={data} getData={getData} session={session} screen={screen} />
           </Tab>
         </Tabs>
       </>

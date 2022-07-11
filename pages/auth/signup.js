@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import { useRouter } from 'next/router'
-import { signIn, useSession } from 'next-auth/client'
+import { signIn, useSession } from 'next-auth/react'
 import { Load } from '../../components/Load'
 import Toast from '../../components/Toast'
 import axios from 'axios'
@@ -14,7 +14,7 @@ import axios from 'axios'
 export default function Signup() {
   const [password, setPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const [session, loading] = useSession()
+  const { data: session, status } = useSession()
   const [success, setSuccess] = useState(false)
   const [show, setShow] = useState(false)
   const [allow, setAllow] = useState(false)

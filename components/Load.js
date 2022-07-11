@@ -1,5 +1,5 @@
 import Spinner from 'react-bootstrap/Spinner'
-import { signIn } from 'next-auth/client'
+import { signIn } from 'next-auth/react'
 
 export const Load = ({ msg }) => (
   <>
@@ -14,8 +14,8 @@ export const Load = ({ msg }) => (
   </>
 )
 
-export function isLoad(session, loading, required) {
-  if (loading) return true
-  if (session === null && !loading && required) { signIn(); return true }
+export function isLoad(session, status, required) {
+  if (status === 'loading') return true
+  if (session === null && status !== 'loading' && required) { signIn(); return true }
   return false
 }

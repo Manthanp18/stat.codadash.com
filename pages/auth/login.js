@@ -6,10 +6,10 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import { useRouter } from 'next/router'
 import { Load } from '../../components/Load'
-import { signIn, useSession } from 'next-auth/client'
+import { signIn, useSession } from 'next-auth/react'
 
 export default function Login() {
-  const [session, loading] = useSession()
+  const { data: session, status } = useSession()
   const [error, setError] = useState(null)
   
   const { handleSubmit, formState: { errors }, control } = useForm({ mode: 'onSubmit'})

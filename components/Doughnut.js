@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Doughnut } from 'react-chartjs-2'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Percent } from 'react-bootstrap-icons'
+import { Load } from './Load'
+
+ChartJS.register(ArcElement, Tooltip, Legend)
 
 export default function DoughnutChart({ data }) {
   const [clickedElement, setClickedElement] = useState('')
@@ -10,10 +14,7 @@ export default function DoughnutChart({ data }) {
     if (data) genChart()
   }, [data])
 
-  function getElementAtEvent(element) {
-    if (!element.length || !chartData) return
-    setClickedElement(chartData.labels[element[0].index])
-  }
+  if (!chartData) return <Load />
 
   function genChart() {
     if (data.length == 0) return
@@ -46,10 +47,7 @@ export default function DoughnutChart({ data }) {
   return (
     <>
       <h1 className=" text-center" style={{fontWeight: '1'}}><Percent className="ml-2 mb-2" size={30}/> Given</h1>
-      <Doughnut 
-        data={chartData}
-        getElementAtEvent={getElementAtEvent}
-      />
+      <Doughnut data={chartData} />
     </>
   )
 }

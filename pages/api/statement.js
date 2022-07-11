@@ -1,6 +1,7 @@
 import { Statement, User } from '../../models'
 import applyMiddleware from '../../util'
-import { getSession } from 'next-auth/client'
+import { getSession } from 'next-auth/react'
+import mongoose from 'mongoose'
 
 export default applyMiddleware(async (req, res) => {
   try {
@@ -11,7 +12,7 @@ export default applyMiddleware(async (req, res) => {
       const user = await User.findOne({ email: session.user.email.toLowerCase() })
       if (!user) throw `Could Not find ${session.user.email}`
       if (!body.date) throw `date ${body.date}`
-      const statement = await Statement.create({ 
+      const statement = await Statement.create({
         user: user.id, 
         alias: user.alias, 
         description: body.description, 
@@ -32,6 +33,22 @@ export default applyMiddleware(async (req, res) => {
       const statement = await Statement.deleteOne({ _id: query.id })
         .catch(err => {throw err._message})
       res.status(200).json(statement)
+    } else if (method === 'PUT') {
+      for (const obj of body) {
+        // TODO: could more smartly detect if changes
+        if (isNaN(Number(obj.data.amount))) {
+          throw 'Cannot cast amount to Number'
+        }
+        await Statement.findByIdAndUpdate(
+          mongoose.Types.ObjectId(obj.id),
+          {
+            amount: Number(obj.data.amount),
+            createdAt: obj.data.date,
+            description: obj.data.desc
+          }
+        ).catch(err => {throw err._message})
+      }
+      res.status(200).json({msg: 'hi'})
     } else {
       throw `Cannot use ${method} method for this route`
     }

@@ -3,10 +3,10 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/client'
+import { useSession } from 'next-auth/react'
 
 export default function Navigation() {
-  const [session, loading] = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
 
   return (

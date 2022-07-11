@@ -2,13 +2,13 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
-import { signOut, useSession } from 'next-auth/client'
+import { signOut, useSession } from 'next-auth/react'
 import { Load, isLoad } from '../../components/Load'
 
 export default function Logout() {
-  const [session, loading] = useSession()
+  const { data: session, status } = useSession()
 
-  if (isLoad(session, loading, true)) return <Load />
+  if (isLoad(session, status, true)) return <Load />
 
   return (
     <>
