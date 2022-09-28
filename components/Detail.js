@@ -35,7 +35,6 @@ export default function Detail({ data, getData, session, screen}) {
         return total
       })
       let randArr = [rand(), rand(), rand()]
-      console.log(randArr)
       datasets.push({
         label: category,
         borderColor: `rgb(${randArr[0]}, ${randArr[1]}, ${randArr[2]})`,

@@ -55,7 +55,9 @@ const statementSchema = new Schema({
   status: String,
   dueDate: String,
   type: String,
-}, { timestamps: true })
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+})
 
 
 export const User = mongoose.models.user || mongoose.model('user', userSchema)
