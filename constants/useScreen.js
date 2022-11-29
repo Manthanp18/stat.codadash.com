@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 export default function useScreen() {
 	const [screenType, setScreenType] = useState(getScreenType());
@@ -8,13 +8,13 @@ export default function useScreen() {
 	}
 
 	useEffect(() => {
-		window.addEventListener('resize', resizeEvent);
+		window.addEventListener('resize', resizeEvent)
 		return () => {
-			window.removeEventListener('resize', resizeEvent);
-		};
+			window.removeEventListener('resize', resizeEvent)
+		}
 	}, [])
 
-	return screenType;
+	return screenType
 }
 
 const getScreenType = () => {
@@ -22,17 +22,17 @@ const getScreenType = () => {
 
 	if (typeof window !== 'undefined') {
 		if (window.matchMedia('(max-width: 575px)').matches) {
-			screenType = 'xsmall';
+			screenType = 'xsmall'
 		} else if (window.matchMedia('(max-width: 768px)').matches) {
-			screenType = 'small';
+			screenType = 'small'
 		} else if (window.matchMedia('(max-width: 991px)').matches) {
-			screenType = 'medium';
+			screenType = 'medium'
 		} else if (window.matchMedia('(max-width: 1199px)').matches) {
-			screenType = 'large';
+			screenType = 'large'
 		} else {
-			screenType = 'xlarge';
+			screenType = 'xlarge'
 		}
 	}
 
-	return screenType;
+	return screenType
 }

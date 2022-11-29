@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import LineChart from './Line'
 
-const rand = () => Math.floor(Math.random() * 255)
 let labels = []
 
 export default function Detail({ data, getData, session, screen}) {
@@ -34,11 +33,13 @@ export default function Detail({ data, getData, session, screen}) {
         if (total === 0) return null
         return total
       })
-      let randArr = [rand(), rand(), rand()]
+      let color = [132, 228, 109] // green
+      if (category === 'Water') color = [ 14, 86, 231 ] // blue
+      if (category === 'Energy') color = [ 231, 14, 14 ] // red
       datasets.push({
         label: category,
-        borderColor: `rgb(${randArr[0]}, ${randArr[1]}, ${randArr[2]})`,
-        backgroundColor: `rgba(${randArr[0]}, ${randArr[1]}, ${randArr[2]}, 0.2)`,
+        borderColor: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+        backgroundColor: `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.2)`,
         data: monthlyData,
       })
     })

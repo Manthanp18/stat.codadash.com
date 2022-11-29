@@ -26,9 +26,6 @@ ChartJS.register(
 // const options = {
 // }
 
-// TODO: this should be set somewhere else
-const rand = () => Math.floor(Math.random() * 255)
-
 // used https://github.com/reactchartjs/react-chartjs-2/blob/master/example/src/charts/Crazy.js as template
 export default function Bars({ data, screen }) {
   const [chartData, setChartData] = useState()
@@ -73,13 +70,16 @@ export default function Bars({ data, screen }) {
     if (screen.includes('small')) xLabels = months
     if (!screen.includes('small')) xLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-    const dataSets = aliases.map((alias, index) => ({
+    const dataSets = aliases.map((alias, index) => {
+      let backgroundColor = 'rgba(54, 162, 235, .8)'
+      if (alias == 'AJ') backgroundColor = 'rgba(100, 51, 204, .8)'
+      return {
         type: 'bar',
         label: aliases[index],
-        backgroundColor: `rgb(${rand()}, ${rand()}, ${rand()})`,
+        backgroundColor,
         data: barData[index],
       }
-    )) || []
+    }) || []
 
     const allYears = []
     data.forEach(doc => {

@@ -35,7 +35,7 @@ export default applyMiddleware(async (req, res) => {
       res.status(200).json(statement)
     } else if (method === 'PUT') {
       for (const obj of body) {
-        // TODO: could more smartly detect if changes
+        // TODO: could detect changes smarter here
         if (isNaN(Number(obj.data.amount))) {
           throw 'Cannot cast amount to Number'
         }
