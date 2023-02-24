@@ -72,3 +72,14 @@ change the listen port @server.js line 23 replace both occurances of 3005 with y
 +short history view by default for main page
 
 +reordered the input row to the top
+
+# 2023 Update
++can select year in the detail page
+
++can see percentage in the doughnut chart
+
++all packages updated to latest
+
++removed a couple dependencies in favor of naitive browser functions (axios, nookies, timeago.js, next-connect)
+
++added SWR which makes data fetching much nicer
