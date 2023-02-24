@@ -6,11 +6,10 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import { PlusSquare, XSquare, Calendar3, ArrowClockwise } from 'react-bootstrap-icons'
 import { useForm } from 'react-hook-form'
 import DateInput from './DateInput'
-import { format } from 'timeago.js'
-import axios from 'axios'
+import { rtf } from '../constants'
 import "react-day-picker/dist/style.css"
 
-export default function History({ data, getData, session}) {
+export default function History({ data, mutate, session}) {
   const { register, handleSubmit, formState: { errors }, reset, setError, setValue } = useForm()
   const [readable, setReadable] = useState(false)
   const [recent, setRecent] = useState()
@@ -22,17 +21,18 @@ export default function History({ data, getData, session}) {
   useEffect(() => setAdmin(session?.user.email === 'codabool@pm.me'), [session])
 
   useEffect(() =>  {
-    if (data) {
-      const arr = data.raw.slice(0)
-      const rec = arr.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
-      if (showAll) {
-        setRecent(rec)
-      } else {
-        setRecent(rec.splice(0, 10))
-      }
+    if (!data?.raw) {
+      setSpin(true)
+      setTimeout(() => setSpin(false), 1000)
+      return
     }
-    setSpin(true)
-    setTimeout(() => setSpin(false), 1000)
+    const arr = data.raw.slice(0)
+    const rec = arr.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
+    if (showAll) {
+      setRecent(rec)
+    } else {
+      setRecent(rec.splice(0, 10))
+    }
   }, [data, showAll])
 
   useEffect(() => {
@@ -47,15 +47,17 @@ export default function History({ data, getData, session}) {
   }, [edit])
 
   function remove(id) {
-    axios.delete('/api/statement', { params: { id } })
-      .then(res => {
-        getData()
+    fetch(`/api/statement?${new URLSearchParams({id})}`,
+      { method: 'DELETE' }
+    )
+      .then(() => mutate())
+      .catch(err => {
+        console.error(err.response.data.msg)
       })
-      .catch(err => console.error(err.response.data.msg))
   }
 
-  function onSubmit(input) {
-    if (!input.amount) {
+  function onSubmit(body) {
+    if (!body.amount) {
       // TODO: setError
       setError("amount", {
         type: "manual",
@@ -64,9 +66,11 @@ export default function History({ data, getData, session}) {
       return
     }
 
-    axios.post('/api/statement', input)
-      .then(() => getData())
-      .catch(err => console.log(err)) // Getting err.response undefined err.response.data.msg
+    fetch('/api/statement', {
+      method: 'POST',
+      body: JSON.stringify(body)
+    }).then(() => mutate())
+      .catch(console.err)
       .finally(() => reset({amount: '', description: ''}))
   }
 
@@ -122,12 +126,11 @@ export default function History({ data, getData, session}) {
         }
         if (obj.id) arr.push(obj)
       }
-      axios.put('/api/statement', arr)
-        .then(res => {
-          setEdit(false)
-          getData()
-        })
-        .catch(console.log)
+
+      fetch('/api/statement', {method: 'PUT', body: JSON.stringify(arr)})
+        .then(() => mutate())
+        .catch(console.error)
+        .finally(() => setEdit(false))
     }
   }
 
@@ -155,7 +158,7 @@ export default function History({ data, getData, session}) {
             <th>By</th>
             <th>Amount</th>
             {/* <th>Total</th> */}
-            <th  ><ArrowClockwise size={26} style={{width: '30px'}} className={`${spin && 'spin'} sway-on-hover`} onClick={getData} fill="#0069d9" /></th>
+            <th  ><ArrowClockwise size={26} style={{width: '30px'}} className={`${spin && 'spin'} sway-on-hover`} onClick={mutate} fill="#0069d9" /></th>
             {admin && <th style={{width: '0', padding: '0'}}></th>}
           </tr>
         </thead>
@@ -195,7 +198,7 @@ export default function History({ data, getData, session}) {
           }
           {recent && !edit && recent.map(row => (
             <tr key={row._id}>
-              <td>{readable ? format(row.createdAt) : new Date(row.createdAt).toDateString()}</td>
+              <td>{readable ? rtf(row.createdAt) : new Date(row.createdAt).toDateString()}</td>
               <td colSpan="2" className={`${getClass(row.description)}`}>{row.description}</td>
               <td>{row.alias}</td>
               <td>

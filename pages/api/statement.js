@@ -1,11 +1,15 @@
 import { Statement, User } from '../../models'
-import applyMiddleware from '../../util'
+import dbConnect from '../../util/db'
 import { getSession } from 'next-auth/react'
 import mongoose from 'mongoose'
 
-export default applyMiddleware(async (req, res) => {
+let body = null
+
+export default async (req, res) => {
   try {
-    const { method, body, query } = req
+    const { method, body:rawBody, query } = req
+    if (rawBody.length) body = JSON.parse(rawBody)
+    await dbConnect()
     const session = await getSession({ req })
     if (!session) throw 'Unauthorized'
     if (method === 'POST') {
@@ -60,7 +64,7 @@ export default applyMiddleware(async (req, res) => {
       res.status(500).json({ msg: '/statement: ' + (err.message || err)})
     }
   }
-})
+}
 
 function getAgg() {
   return Statement.aggregate([

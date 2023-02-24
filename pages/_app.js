@@ -2,9 +2,14 @@ import Head from 'next/head'
 import Navigation from '../components/Navigation'
 import Container from 'react-bootstrap/Container'
 import { SessionProvider } from 'next-auth/react'
+import { SWRConfig } from 'swr'
 
 import '../styles/globals.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+
+const config = {
+  fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
+}
 
 export default function App({ Component, pageProps }) {
   return (
@@ -18,11 +23,13 @@ export default function App({ Component, pageProps }) {
         <link rel="icon" href="/image/favicon-32x32.gif" />
       </Head>
       <Navigation />
-      <main>
-        <Container fluid={'md'} className="p-1">
-          <Component {...pageProps} />
-        </Container>
-      </main>
+      <SWRConfig value={config}>
+        <main>
+          <Container fluid={'md'} className="p-1">
+            <Component {...pageProps} />
+          </Container>
+        </main>
+      </SWRConfig>
     </SessionProvider>
   )
 }

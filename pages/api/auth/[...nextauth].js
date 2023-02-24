@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from 'bcryptjs'
-import { connectDB } from '../../../util/db'
+import dbConnect from '../../../util/db'
 import { User } from '../../../models'
 
 export default (req, res) => (
@@ -20,7 +20,7 @@ export default (req, res) => (
 
         authorize: async (clientData) => {
           try {
-            await connectDB()
+            await dbConnect()
             const user = await User.findOne({ email: clientData.email })
               .catch(err => {
                 console.log(err)

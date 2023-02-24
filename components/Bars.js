@@ -72,7 +72,7 @@ export default function Bars({ data, screen }) {
 
     const dataSets = aliases.map((alias, index) => {
       let backgroundColor = 'rgba(54, 162, 235, .8)'
-      if (alias == 'AJ') backgroundColor = 'rgba(100, 51, 204, .8)'
+      if (alias == 'AJ' || alias == 'Other') backgroundColor = 'rgba(100, 51, 204, .8)'
       return {
         type: 'bar',
         label: aliases[index],

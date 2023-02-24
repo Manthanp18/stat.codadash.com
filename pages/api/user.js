@@ -1,10 +1,12 @@
 import { User } from '../../models'
-import applyMiddleware from '../../util'
+import dbConnect from '../../util/db'
 // import { getSession } from 'next-auth/react'
 
-export default applyMiddleware(async (req, res) => {
+export default async (req, res) => {
   try {
-    const { method, body, query } = req
+    const { method, body: rawBody, query } = req
+    const body = JSON.parse(rawBody)
+    await dbConnect()
     if (method === 'POST') {
       const allowedList = process.env.ALLOWLISTED_EMAILS || ''
       let arr = allowedList.split(',') || []
@@ -48,4 +50,4 @@ export default applyMiddleware(async (req, res) => {
       res.status(500).json({ msg: '/user: ' + (err.message || err)})
     }
   }
-})
+}

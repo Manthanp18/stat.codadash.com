@@ -3,7 +3,7 @@ import LineChart from './Line'
 
 let labels = []
 
-export default function Detail({ data, getData, session, screen}) {
+export default function Detail({ data, mutate, session, screen}) {
   const [datasets, setDataSets] = useState()
   const [categories, setCategories] = useState(['Water', 'Energy', 'Internet']) // mortgage removed
 

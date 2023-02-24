@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
-import axios from 'axios'
+import useSWR from 'swr'
 
 import { isLoad, Load } from '../components/Load'
 import Doughnut from '../components/Doughnut'
@@ -16,24 +16,10 @@ import useScreen from '../constants/useScreen'
 export default function index() {
   const { data: session, status } = useSession()
   const [key, setKey] = useState('history')
-  const [data, setData] = useState()
   let screen = useScreen()
   if (!screen) screen = 'medium'
-  
-  useEffect(() =>  {
-    if (session) getData()
-  }, [session])
-
+  const { data, error, mutate } = useSWR('/api/statement')
   if (isLoad(session, status, true)) return <Load msg='Please reload the page' />
-
-  async function getData() {
-    if (!session?.id) return
-    const all = await axios.get('/api/statement')
-      .then(res => res.data)
-      .catch(err => {console.error(err); return}) // Getting err.response undefined err.response.data.msg
-    // console.log(all)
-    setData(all)
-  }  
 
   return (
     <>
@@ -57,10 +43,10 @@ export default function index() {
           className="mt-2"
         >
           <Tab eventKey="history" title="History">
-            <History data={data} getData={getData} session={session} />
+            <History data={data} mutate={mutate} session={session} />
           </Tab>
           <Tab eventKey="detail" title="Detail">
-            <Detail data={data} getData={getData} session={session} screen={screen} />
+            <Detail data={data} mutate={mutate} session={session} screen={screen} />
           </Tab>
         </Tabs>
       </>
