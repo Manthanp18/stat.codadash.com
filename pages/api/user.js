@@ -2,10 +2,12 @@ import { User } from '../../models'
 import dbConnect from '../../util/db'
 // import { getSession } from 'next-auth/react'
 
+let body = null
+
 export default async (req, res) => {
   try {
     const { method, body: rawBody, query } = req
-    const body = JSON.parse(rawBody)
+    if (rawBody.length) body = JSON.parse(rawBody)
     await dbConnect()
     if (method === 'POST') {
       const allowedList = process.env.ALLOWLISTED_EMAILS || ''

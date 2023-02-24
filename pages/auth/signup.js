@@ -9,7 +9,6 @@ import { useRouter } from 'next/router'
 import { signIn, useSession } from 'next-auth/react'
 import { Load } from '../../components/Load'
 import Toast from '../../components/Toast'
-import axios from 'axios'
 
 export default function Signup() {
   const [password, setPassword] = useState('')
@@ -38,11 +37,16 @@ export default function Signup() {
     setSubmitting(true)
     // console.log(data)
       bcrypt.hash(data.password, 10, (err, hash) => {
-        axios.post('/api/user', {
-            email: data.email,
-            password: hash,
-            alias: data.alias
-          })
+        fetch('/api/user', 
+          { 
+            method: 'POST', 
+            body: JSON.stringify({
+              email: data.email,
+              password: hash,
+              alias: data.alias
+            }) 
+          }
+        )
           .then((res) => {
             // console.log('success', res.data)
             setSuccess(true)
