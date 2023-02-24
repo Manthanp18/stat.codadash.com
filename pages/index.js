@@ -30,7 +30,7 @@ export default function index() {
           </div>
         </Col>
         <Col lg={4}>
-          <div className={`${!screen.includes('small') && 'p-5 mb-3'}`}>
+          <div className={`${screen.includes('small') ? 'mt-5' : 'p-3'} mb-5`} style={{maxHeight: '450px', maxWidth: '450px'}}>
             {data && <Doughnut data={data.doughnut} />}
           </div>
         </Col>

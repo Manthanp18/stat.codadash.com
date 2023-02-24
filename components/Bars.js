@@ -45,9 +45,9 @@ export default function Bars({ data, screen }) {
     }
   }, [yearOptions, year])
 
-  useEffect(() => {
-    setYear(new Date().getFullYear())
-  }, [])
+  // useEffect(() => {
+  //   setYear(new Date().getFullYear())
+  // }, [])
 
   if (!chartData) return <Load />
 
@@ -81,14 +81,9 @@ export default function Bars({ data, screen }) {
       }
     }) || []
 
-    const allYears = []
-    data.forEach(doc => {
-      if (!allYears.includes(doc.year)) {
-        allYears.push(doc.year)
-      }
-    })
+
+    setYearOptions([...new Set(data.map(({ year }) => year)).values()])
     
-    setYearOptions(allYears)
     setChartData({
       labels: xLabels,
       datasets: dataSets,

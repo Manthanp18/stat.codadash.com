@@ -7,6 +7,41 @@ import { color_1, color_2 } from '../constants'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
+export const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+    title: {
+      display: false
+    },
+    tooltip: {
+      bodyFont: {
+        size: 18
+      },
+      titleFont: {
+        size: 18
+      },
+      padding: 4,
+      callbacks: {
+        label: function (context) {
+          let total = 0
+          context.dataset.data.forEach((amt) => {
+            total += amt
+          })
+          const money = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0,
+          })
+          return ` ${money.format(context.raw)} (${Math.round((context.raw / total) * 100)}%) `
+        }
+      }
+    }
+  }
+}
+
 export default function DoughnutChart({ data }) {
   const [clickedElement, setClickedElement] = useState('')
   const [chartData, setChartData] = useState()
@@ -48,7 +83,7 @@ export default function DoughnutChart({ data }) {
   return (
     <>
       <h1 className=" text-center" style={{fontWeight: '1'}}><Percent className="ml-2 mb-2" size={30}/> Given</h1>
-      <Doughnut data={chartData} />
+      <Doughnut data={chartData} options={options} />
     </>
   )
 }
