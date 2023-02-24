@@ -1,20 +1,15 @@
+version: '3.7'
 services:
   mongo:
-    image: mongo # pulls 4.4.4 as of 4/2021
-    hostname: mongo
-    container_name: mongo
+    image: mongo:3.6.10
     environment:
-      - MONGO_INITDB_DATABASE=money
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
-    volumes:
-      - data:/data/db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     ports:
       - 27017:27017
-    restart: unless-stopped
+    volumes:
+      - db:/data/db
     env_file:
       - .env
 volumes:
-  data:
-
-# https://zgadzaj.com/development/docker/docker-compose/containers/mongodb
+  db:
